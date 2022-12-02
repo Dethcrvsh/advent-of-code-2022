@@ -84,7 +84,7 @@ int main() {
         memset(row, 0, sizeof(row));
     }
 
-    // Sort the array    
+    // Sort the array     
     qsort(biggest, BIGGEST_NUM, sizeof(int), compare);
 
     printf("Part 1:\n");
