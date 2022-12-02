@@ -93,4 +93,3 @@ int main() {
     printf("    Sum of the 3 greatest: %d\n", sum_biggest(biggest));
 }
 
-
