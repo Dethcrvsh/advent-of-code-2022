@@ -22,7 +22,6 @@ void get_row(FILE* file, char row[]) {
 }
 
 void add_biggest(int sum, int biggest[]) {
-    // Move the elements further down the array
     int r_index = -1;
 
     for (int i = 0; i < BIGGEST_NUM; i++) {
@@ -34,6 +33,10 @@ void add_biggest(int sum, int biggest[]) {
     if (r_index != -1) {
         biggest[r_index] = sum;
     }
+}
+
+int compare(const void * a, const void * b) {
+   return ( *(int*)b - *(int*)a );
 }
 
 int sum_biggest(int biggest[]) {
@@ -80,6 +83,9 @@ int main() {
         // Empty the string
         memset(row, 0, sizeof(row));
     }
+
+    // Sort the array    
+    qsort(biggest, BIGGEST_NUM, sizeof(int), compare);
 
     printf("Part 1:\n");
     printf("    Greatest amount of calories: %d\n", biggest[0]);
