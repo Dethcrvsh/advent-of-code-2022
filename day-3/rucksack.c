@@ -107,6 +107,11 @@ int main() {
         if ((i+1) % 3 == 0) {
             get_common(group, sizeof(group) / sizeof(char*), common);
             group_score += get_char_score(common);
+
+            // Oops had memory leaks
+            for (int i = 0; i < 3; i++) {
+                free(group[i]);
+            }
         }
 
         i++;
