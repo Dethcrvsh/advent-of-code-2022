@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char FILE_NAME[] = "input";
@@ -44,11 +45,12 @@ int get_char_score(char* common) {
 
     for (int i = 0; common[i]; i++) {
         char c = common[i];
+        //printf("c\n", c);
         
-        // Lowercase
-        if (c < 97) {
+        // Uppercase
+        if (65 <= c && c <= 90) {
             score += c - 65 + 27;
-        } else {
+        } else if (97 <= c && c <= 122) {
             score += c - 97 + 1;
         }
     }
@@ -56,10 +58,27 @@ int get_char_score(char* common) {
     return score;
 }
 
+void get_common(char** strings, int size, char* common) {
+    // Get the common characters from a char array
+    char accum[64];
+    strcpy(accum, strings[0]);
+
+    for (int i = 1; i < size; i++) {
+        memset(common, 0, 64);
+        get_common_chars(strings[i], accum, common);
+        strcpy(accum, common);
+    }
+}
+
 int main() {
+    char common[16];
+
     FILE* file = fopen(FILE_NAME, "r");
     int status;
     int score = 0;
+    int group_score = 0;
+    int i = 0;
+    char* group[3];
 
     do {
         char line[64];
@@ -75,13 +94,28 @@ int main() {
 
         status = get_next_line(file, line, sizeof(line));
 
+        // Add the line to the group
+        char* line_group = (char*) malloc(sizeof(line));
+        strcpy(line_group, line);
+        group[i % 3] = line_group;
+
         split_string(line, part1, part2);
         get_common_chars(part1, part2, common);
         score += get_char_score(common);
+
+        // Calculate the group score every third line
+        if ((i+1) % 3 == 0) {
+            get_common(group, sizeof(group) / sizeof(char*), common);
+            group_score += get_char_score(common);
+        }
+
+        i++;
     } while(status);
 
-
-    printf("Total score: %d\n", score);
+    printf("Part 1:\n");
+    printf("    Total score: %d\n\n", score);
+    printf("Part 2:\n");
+    printf("    Group score: %d\n", group_score);
 
     return 0;
 }
